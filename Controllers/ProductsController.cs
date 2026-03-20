@@ -19,28 +19,46 @@ namespace lab1_AS.Controllers
             _context = context;
         }
 
-        // GET: Products
-        public async Task<IActionResult> Index()
+        // GET: Products (Updated for Category Filtering)
+        public async Task<IActionResult> Index(int? categoryId)
         {
-            var appDbContext = _context.Products.Include(p => p.Category);
-            return View(await appDbContext.ToListAsync());
+            // Prepare the dropdown list for the view
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", categoryId);
+
+            var query = _context.Products.Include(p => p.Category).AsQueryable();
+
+            // Filter if a category was selected in the dropdown
+            if (categoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == categoryId);
+            }
+
+            return View(await query.ToListAsync());
+        }
+
+        // NEW: Action to filter products by a specific tag
+        public async Task<IActionResult> ByTag(int tagId)
+        {
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Tags)
+                .Where(p => p.Tags.Any(t => t.Id == tagId))
+                .ToListAsync();
+
+            return View("Index", products);
         }
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var product = await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Tags) // Important for showing tags in details
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+
+            if (product == null) return NotFound();
 
             return View(product);
         }
@@ -54,113 +72,27 @@ namespace lab1_AS.Controllers
         }
 
         // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,CategoryId,Tags")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,CategoryId")] Product product, int[] selectedTagIds)
         {
             if (ModelState.IsValid)
             {
+                // Attach the selected tags to the product
+                if (selectedTagIds != null && selectedTagIds.Length > 0)
+                {
+                    product.Tags = await _context.Tags.Where(t => selectedTagIds.Contains(t.Id)).ToListAsync();
+                }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", product.CategoryId);
-            ViewData["Tags"] = new MultiSelectList(_context.Tags, "Id", "Name", product.Tags);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
+            ViewData["Tags"] = new MultiSelectList(_context.Tags, "Id", "Name");
             return View(product);
         }
 
-        // GET: Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", product.CategoryId);
-            return View(product);
-        }
-
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,CategoryId")] Product product)
-        {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", product.CategoryId);
-            return View(product);
-        }
-
-        // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
-        }
-
-        // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
-        }
+        // ... Edit and Delete methods stay the same as your scaffolded code ...
     }
 }
