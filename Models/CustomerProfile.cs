@@ -1,0 +1,11 @@
+﻿namespace lab1_AS.Models
+{
+    public class CustomerProfile
+    {
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public string Phone {  get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public Customer Customer { get; set; }
+    }
+}

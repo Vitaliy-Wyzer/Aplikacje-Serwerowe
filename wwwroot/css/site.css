@@ -1,0 +1,155 @@
+﻿/* Ogólne ustawienia strony */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #2c3e50;
+    line-height: 1.6;
+    padding: 40px;
+}
+
+/* Styl dla nagłówków */
+h1 {
+    color: #2980b9;
+    border-bottom: 3px solid #2980b9;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Sekcja LISTY (Index) --- */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 12px;
+}
+
+/* Linki jako stylowe przyciski */
+a[asp-controller="student"] {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+a[asp-controller="student"]:hover {
+    background-color: #21618c;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* --- Sekcja SZCZEGÓŁÓW (Details) --- */
+p {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 10px;
+    border-left: 5px solid #3498db;
+    max-width: 500px;
+}
+
+/* Wyróżnienie etykiet (opcjonalne, jeśli dodasz <strong> w HTML) */
+p strong {
+    color: #34495e;
+    min-width: 120px;
+    display: inline-block;
+}
+
+/* Ogólne ustawienia strony */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #2c3e50;
+    line-height: 1.6;
+    padding: 40px;
+}
+
+/* Styl dla nagłówków */
+h1 {
+    color: #2980b9;
+    border-bottom: 3px solid #2980b9;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Sekcja LISTY (Index) --- */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+    ul li {
+        margin-bottom: 12px;
+    }
+
+/* Linki jako stylowe przyciski */
+a[asp-controller="student"] {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+    a[asp-controller="student"]:hover {
+        background-color: #21618c;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+/* --- Sekcja SZCZEGÓŁÓW (Details) --- */
+p {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 10px;
+    border-left: 5px solid #3498db;
+    max-width: 500px;
+}
+
+    /* Wyróżnienie etykiet (opcjonalne, jeśli dodasz <strong> w HTML) */
+    p strong {
+        color: #34495e;
+        min-width: 120px;
+        display: inline-block;
+    }
+
+ul {
+    padding: 0;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden; /* Aby zaokrąglenia działały na elementach li */
+}
+
+    ul li {
+        background-color: white;
+        border-bottom: 1px solid #eee;
+        transition: background 0.3s;
+    }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        ul li:hover {
+            background-color: #f0f8ff; /* Jasnobłękitny hover */
+        }
+
+        ul li a {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+        }
