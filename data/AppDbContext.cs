@@ -18,5 +18,30 @@ namespace lab1_AS.data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<CustomerProfile> CustomerProfiles { get; set; }
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<OrderStatus> OrderStatuses { get; set; } 
+        public DbSet<OrderStatusHistory> StatusHistory { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.OrderStatus)
+                .WithMany(os => os.Orders)
+                .HasForeignKey(o => o.OrderStatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrderStatusHistory>()
+                .HasOne(osh => osh.OrderStatus)
+                .WithMany(os => os.StatusHistories)
+                .HasForeignKey(osh => osh.OrderStatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrderStatusHistory>()
+                .HasOne(osh => osh.Order)
+                .WithMany(o => o.StatusHistory)
+                .HasForeignKey(osh => osh.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

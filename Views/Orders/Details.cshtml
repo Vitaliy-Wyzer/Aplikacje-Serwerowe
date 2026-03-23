@@ -1,0 +1,59 @@
+﻿@model lab1_AS.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h1>Order Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Order ID</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+
+        <dt class="col-sm-2">Created At</dt>
+        <dd class="col-sm-10">@Model.CreatedAt.ToString("g")</dd>
+
+        <dt class="col-sm-2">Customer</dt>
+        <dd class="col-sm-10">@Model.Customer.Id (ID)</dd>
+
+        <dt class="col-sm-2">Current Status</dt>
+        <dd class="col-sm-10">
+            <strong>@Model.OrderStatus.Name</strong>
+            <a asp-action="EditStatus" asp-route-id="@Model.Id" class="btn btn-sm btn-warning ms-3">Change Status</a>
+        </dd>
+    </dl>
+</div>
+
+<h3 class="mt-5">Status Change History</h3>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Date & Time of Change</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.StatusHistory != null && Model.StatusHistory.Any())
+        {
+            foreach (var history in Model.StatusHistory)
+            {
+                <tr>
+                    <td>@history.OrderStatus.Name</td>
+                    <td>@history.ChangedAt.ToString("g")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2">No history available for this order.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

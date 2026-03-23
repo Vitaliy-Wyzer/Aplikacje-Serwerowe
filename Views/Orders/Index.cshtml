@@ -1,0 +1,31 @@
+﻿@model IEnumerable<lab1_AS.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1>Orders</h1>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Created At</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.CreatedAt.ToString("d")</td>
+                <td>@item.OrderStatus.Name</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details & History</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
